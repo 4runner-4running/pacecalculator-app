@@ -1,8 +1,8 @@
 package com.jhapps.pacecalculator
 
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.PlayArrow
+import androidx.compose.material.icons.filled.Calculate
+import androidx.compose.material.icons.filled.Timelapse
 import androidx.compose.ui.graphics.vector.ImageVector
 
 enum class Destination(
@@ -11,6 +11,6 @@ enum class Destination(
     val icon: ImageVector,
     val contentDescription: String
 ){
-    PACE("pace", "Pace", Icons.Filled.PlayArrow, "Pace Calculations"),
-    SPLITS("splits", "Splits", Icons.Filled.Info, "Split Calculations");
+    PACE("pace", "Pace", Icons.Filled.Calculate, "Pace Calculations"),
+    SPLITS("splits", "Splits", Icons.Filled.Timelapse, "Split Calculations");
 }
