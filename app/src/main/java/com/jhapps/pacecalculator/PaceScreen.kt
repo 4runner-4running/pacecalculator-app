@@ -22,13 +22,11 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.min
 import androidx.compose.ui.unit.sp
 
 @SuppressLint("DefaultLocale")
@@ -42,16 +40,24 @@ fun PaceScreen(modifier: Modifier = Modifier) {
         if(speedText.isEmpty())
             return;
 
-        val pace = Calculators.ConvertSpeedToPace(speedText);
+        val pace = Calculators.convertSpeedToPace(speedText);
         paceMinText = "${pace.minutes}";
         paceSecText = String.format("%02d", pace.seconds);
     }
 
     fun handlePaceConversion(){
-        if (paceMinText.isEmpty() && paceSecText.isEmpty())
-            return;
 
-        val speed = Calculators.ConvertPaceToSpeed(paceMinText, paceSecText);
+        val minutes = if (paceMinText.isEmpty()) {
+            "00"
+        }
+        else {paceMinText}
+
+        val seconds = if (paceSecText.isEmpty()){
+            "00"
+        }else {paceSecText}
+        paceSecText = seconds;
+
+        val speed = Calculators.convertPaceToSpeed(minutes, seconds);
         speedText = speed;
     }
 
@@ -140,7 +146,7 @@ fun TimeSpeedDistance(setSpeedCallback: (calculatedSpeed: String) -> Unit, modif
         if (speedText.isEmpty() || distanceText.isEmpty())
             return;
 
-        val pace = Calculators.CalculateTime(speedText.toDouble(), distanceText.toDouble())
+        val pace = Calculators.calculateTime(speedText.toDouble(), distanceText.toDouble())
         Log.d("PaceScreen::", "${pace.hour} : ${pace.minutes} : ${pace.seconds}")
         hourText = if (pace.hour > 0){
             pace.hour.toString()
@@ -156,8 +162,16 @@ fun TimeSpeedDistance(setSpeedCallback: (calculatedSpeed: String) -> Unit, modif
         if (speedText.isEmpty())
             return;
 
-        val distance = Calculators.CalculateDistance(hourText.toDouble(), minText.toDouble(), secondText.toDouble(), speedText.toDouble())
+        val distance = Calculators.calculateDistance(hourText.toDouble(), minText.toDouble(), secondText.toDouble(), speedText.toDouble())
         distanceText = "$distance";
+    }
+
+    fun handleSpeedClick(){
+        if (distanceText.isEmpty())
+            return;
+
+        val speed = Calculators.calculateSpeed(hourText.toDouble(), minText.toDouble(), secondText.toDouble(), distanceText.toDouble())
+        speedText = "$speed"
     }
 
     Row(modifier = modifier.fillMaxWidth()){
@@ -217,7 +231,7 @@ fun TimeSpeedDistance(setSpeedCallback: (calculatedSpeed: String) -> Unit, modif
             }
         }
         Column(modifier = modifier.weight(.4f)){
-            Button(onClick = {}){
+            Button(onClick = {handleSpeedClick()}){
                 Text("SPEED")
             }
         }

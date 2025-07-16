@@ -5,7 +5,7 @@ import java.math.RoundingMode
 
 class Calculators {
     companion object {
-        fun ConvertSpeedToPace(input: String): Pace {
+        fun convertSpeedToPace(input: String): Pace {
             val speed = input.toDouble();
 
             val minutes = 60 / speed;
@@ -17,7 +17,7 @@ class Calculators {
             return Pace(0, minutes.toInt(), seconds.toInt());
         }
 
-        fun ConvertPaceToSpeed(min: String, sec: String): String {
+        fun convertPaceToSpeed(min: String, sec: String): String {
             val minNum = min.toDouble();
             val secNum = sec.toDouble() /  60;
 
@@ -28,9 +28,7 @@ class Calculators {
             return BigDecimal(speed).setScale(2, RoundingMode.HALF_EVEN).toString();
         }
 
-        fun CalculateTime(speed: Double, distance: Double): Pace {
-            var time = "";
-
+        fun calculateTime(speed: Double, distance: Double): Pace {
             val totalTime = distance / speed;
 
             val totalMinutes = totalTime * 60;
@@ -53,16 +51,27 @@ class Calculators {
             return Pace(0, totalMinutes.toInt(), seconds.toInt())
         }
 
-        fun CalculateDistance(hours: Double, minutes: Double, seconds:Double, speed: Double): Double {
+        fun calculateDistance(hours: Double, minutes: Double, seconds:Double, speed: Double): Double {
             if ((hours == 0.0 && minutes == 0.0 && seconds == 0.0) || speed == 0.0)
                 return 0.0
 
-            // convert everything down to minutes
+            // convert everything to minutes
             val totalMinutes = minutes + (hours * 60) + (seconds / 60);
 
             val distance = (totalMinutes * speed / 60);
 
             return BigDecimal(distance).setScale(2, RoundingMode.HALF_EVEN).toDouble();
+        }
+
+        fun calculateSpeed(hours: Double, minutes: Double, seconds: Double, distance: Double): Double {
+            if ((hours == 0.0 && minutes == 0.0 && seconds == 0.0) || distance == 0.0)
+                return 0.0
+
+            // convert everything to minutes
+            val totalMinutes = minutes + (hours * 60) + (seconds / 60);
+            val speed = (distance / totalMinutes) * 60;
+
+            return BigDecimal(speed).setScale(2, RoundingMode.HALF_EVEN).toDouble()
         }
     }
 }
